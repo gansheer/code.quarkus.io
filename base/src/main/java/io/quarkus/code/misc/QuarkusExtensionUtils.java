@@ -11,7 +11,9 @@ import io.quarkus.registry.catalog.Extension;
 import io.quarkus.registry.catalog.ExtensionCatalog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -69,6 +71,7 @@ public class QuarkusExtensionUtils {
                 .guide(extensionProcessor.getGuide())
                 .platform(ext.hasPlatformOrigin())
                 .bom("%s:%s:%s".formatted(bom.getGroupId(), bom.getArtifactId(), bom.getVersion()))
+                .integrates(extractIntegrates(ext))
                 .build());
     }
 
@@ -89,5 +92,26 @@ public class QuarkusExtensionUtils {
         } else {
             return extension.getOrigins().get(0).getBom();
         }
+    }
+
+    private static Map<String, CodeQuarkusExtension.IntegratesEntry> extractIntegrates(Extension ext) {
+        Map<String, Object> integratesRaw = ExtensionProcessor.getIntegrates(ext);
+        if (integratesRaw.isEmpty()) {
+            return null;
+        }
+
+        Map<String, CodeQuarkusExtension.IntegratesEntry> result = new HashMap<>();
+        for (Map.Entry<String, Object> entry : integratesRaw.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String, String> entryMap = (Map<String, String>) entry.getValue();
+                result.put(entry.getKey(),
+                    new CodeQuarkusExtension.IntegratesEntry(
+                        entryMap.get("artifact"),
+                        entryMap.get("version")
+                    ));
+            }
+        }
+        return result.isEmpty() ? null : result;
     }
 }

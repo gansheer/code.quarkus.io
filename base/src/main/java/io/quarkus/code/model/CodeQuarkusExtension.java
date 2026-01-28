@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @JsonInclude(Include.NON_NULL)
@@ -23,7 +24,11 @@ public record CodeQuarkusExtension(
         String guide,
         int order,
         boolean platform,
-        String bom) {
+        String bom,
+        Map<String, IntegratesEntry> integrates) {
+
+    public record IntegratesEntry(String artifact, String version) {
+    }
 
     public ExtensionRef toExtensionRef() {
         return new ExtensionRef(id, version, platform);
@@ -51,7 +56,8 @@ public record CodeQuarkusExtension(
                 .guide(existing.guide())
                 .order(existing.order())
                 .platform(existing.platform())
-                .bom(existing.bom());
+                .bom(existing.bom())
+                .integrates(existing.integrates());
     }
 
     public static class Builder {
@@ -71,6 +77,7 @@ public record CodeQuarkusExtension(
         private int order;
         private boolean platform;
         private String bom;
+        private Map<String, IntegratesEntry> integrates;
 
         private Builder() {
         }
@@ -155,6 +162,11 @@ public record CodeQuarkusExtension(
             return this;
         }
 
+        public Builder integrates(Map<String, IntegratesEntry> integrates) {
+            this.integrates = integrates;
+            return this;
+        }
+
         public CodeQuarkusExtension build() {
             return new CodeQuarkusExtension(
                     id,
@@ -172,7 +184,8 @@ public record CodeQuarkusExtension(
                     guide,
                     order,
                     platform,
-                    bom);
+                    bom,
+                    integrates);
         }
     }
 }

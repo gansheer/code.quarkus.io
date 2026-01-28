@@ -137,6 +137,17 @@ export function ExtensionMoreDropdown(props: ExtensionMoreDropdownProps) {
                 tooltipPlacement="left"
                 zIndex={201}>Copy the <b>groupId:artifactId:version</b></CopyToClipboard>
           </DropdownItem>
+          {props.integrates && Object.keys(props.integrates).length > 0 && (
+            <React.Fragment>
+              <Dropdown.Divider />
+              <Dropdown.Header>Integrates with:</Dropdown.Header>
+              {Object.entries(props.integrates).map(([name, entry]) => (
+                <DropdownItem key={name} as="div" className="integrates-item">
+                  <strong>{name}</strong> <span className="version">({entry.version})</span>
+                </DropdownItem>
+              ))}
+            </React.Fragment>
+          )}
           {props.guide && (<DropdownItem key="guide" href={props.guide} target="_blank" onClick={openGuide}>
             <FaMap/> See the extension&nbsp;<b>guide</b>
           </DropdownItem>)}

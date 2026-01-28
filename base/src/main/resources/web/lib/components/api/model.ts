@@ -28,6 +28,11 @@ export interface Tag {
   hide?: boolean;
 }
 
+export interface IntegratesEntry {
+  artifact: string;
+  version: string;
+}
+
 export interface Extension {
   id: string;
   version: string;
@@ -43,6 +48,7 @@ export interface Extension {
   order: number;
   guide?: string;
   bom?: string;
+  integrates?: Record<string, IntegratesEntry>;
 }
 
 export interface Preset {
