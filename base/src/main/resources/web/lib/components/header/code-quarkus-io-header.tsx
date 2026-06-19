@@ -23,6 +23,8 @@ function SupportButton(prop: {}) {
       <Button onClick={openPanel} aria-label="enterprise support"><FaHandsHelping/> Available with Enterprise Support</Button>
       <div className="support-panel">
         <a href="https://code.quarkus.redhat.com" onClick={linkTracker}><FaRedhat />Code with the Red Hat Build of Quarkus</a>
+        <a href="https://code.camel.redhat.com/" onClick={linkTracker}><FaRedhat />Code with the Red Hat Build of Apache Camel</a>
+        <a href="https://code.quarkus.ibm.com" onClick={linkTracker}><span className="icon-text-ibm">IBM</span>Code with the IBM Enterprise Build of Quarkus</a>
       </div>
     </div>
   );
